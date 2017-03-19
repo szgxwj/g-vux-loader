@@ -5,7 +5,7 @@ const utils = require('loader-utils')
 module.exports = function (source) {
   this.cacheable()
   const _this = this
-  const config = this.vux || utils.getLoaderConfig(this, 'vux')
+  const config = this.vux || utils.getLoaderConfig(this, 'g-vux')
 
   if (!config.plugins || !config.plugins.length) {
     return source
@@ -22,9 +22,9 @@ module.exports = function (source) {
 
   if (config.options.vuxDev) {
     if (/App\.vue$/.test(this.resourcePath)) {
-      source = source.replace(/~vux\/src/g, '.')
+      source = source.replace(/~g-vux\/src/g, '.')
     } else {
-      source = source.replace(/~vux\/src/g, '..')
+      source = source.replace(/~g-vux\/src/g, '..')
     }
   }
 

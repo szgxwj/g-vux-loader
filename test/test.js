@@ -130,7 +130,7 @@ var parse = require('../src/libs/import-parser')
 const str = parse(`<script>
 import {
         Group
-    } from 'vux';
+    } from 'g-vux';
 
 `, function (opts) {
       // console.log(opts)
@@ -142,7 +142,7 @@ var commomMapper = function (opts) {
   components = opts.components.map(function (one) {
     return one.newName
   })
-  return `import { ${components.join(', ')} } from 'vux'`
+  return `import { ${components.join(', ')} } from 'g-vux'`
 }
 
 var vuxMapper = function (opts) {
@@ -157,16 +157,16 @@ var vuxMapper = function (opts) {
   return str
 }
 
-describe('vux-loader', function () {
+describe('g-vux-loader', function () {
 
   describe('lib:get theme variables', function () {
     it('basic', function () {
-      const rs = themeParse(path.resolve(__dirname, './vux-fixtures/less-theme-001.less'))
+      const rs = themeParse(path.resolve(__dirname, './g-vux-fixtures/less-theme-001.less'))
       expect(rs.a).to.equal('b')
     })
 
     it('ignore comments', function () {
-      const rs = themeParse(path.resolve(__dirname, './vux-fixtures/less-theme-002.less'))
+      const rs = themeParse(path.resolve(__dirname, './g-vux-fixtures/less-theme-002.less'))
       expect(rs.a).to.equal('b')
       expect(rs.c).to.equal('d')
     })
@@ -176,12 +176,12 @@ describe('vux-loader', function () {
 
     let tests = [{
       title: 'basic',
-      string: `import {A,B} from 'vux'`,
+      string: `import {A,B} from 'g-vux'`,
       rs: ['A', 'B']
     }, {
       title: 'do not parse comments',
-      string: `// import {A,B} from 'vux'
-import { C, D} from 'vux'`,
+      string: `// import {A,B} from 'g-vux'
+import { C, D} from 'g-vux'`,
       rs: `// import {A,B} from 'vux'
 import { C, D } from 'vux'`
     }, {

@@ -1,6 +1,6 @@
 {
-  "name": "vux-loader",
-  "version": "1.0.54",
+  "name": "g-vux-loader",
+  "version": "1.0.553",
   "description": "extended loader for vue-loader",
   "main": "src/index.js",
   "keywords": [

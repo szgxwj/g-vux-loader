@@ -2,7 +2,7 @@
 
 function parse(source, fn, moduleName) {
   source = source.replace(/\/\/\n/g, '')
-  moduleName = moduleName || 'vux'
+  moduleName = moduleName || 'g-vux'
   if ((moduleName && source.indexOf(moduleName) === -1) || source.indexOf('import') === -1) {
     return source
   }

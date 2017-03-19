@@ -20,7 +20,7 @@ module.exports = function (source) {
     return source
   }
   const basename = path.basename(this.resourcePath)
-  let isVuxVueFile = this.resourcePath.replace(/\\/g, '/').indexOf('/vux/src/components') > -1
+  let isVuxVueFile = this.resourcePath.replace(/\\/g, '/').indexOf('/g-vux/src/components') > -1
   if (config.options.vuxDev && this.resourcePath.replace(/\\/g, '/').indexOf('src/components') > -1) {
     isVuxVueFile = true
   }
@@ -33,7 +33,7 @@ module.exports = function (source) {
       if (sizeMatch) {
         size = sizeMatch[1]
       }
-      let svgPath = path.resolve(config.options.projectRoot, `node_modules/vux/src/icons/${b}.svg`)
+      let svgPath = path.resolve(config.options.projectRoot, `node_modules/g-vux/src/icons/${b}.svg`)
       if (config.options.vuxDev) {
         svgPath = path.resolve(config.options.projectRoot, `src/icons/${b}.svg`)
       }

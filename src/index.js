@@ -130,6 +130,17 @@ module.exports.merge = function (oldConfig, vuxConfig) {
     vuxConfig.plugins = []
   }
 
+  if (vuxConfig.plugins.length) {
+    vuxConfig.plugins = vuxConfig.plugins.map(function (plugin) {
+      if (typeof plugin === 'string') {
+        return {
+          name: plugin
+        }
+      }
+      return plugin
+    })
+  }
+
   vuxConfig.allPlugins = vuxConfig.allPlugins || []
 
   // check multi plugin instance
@@ -205,14 +216,14 @@ module.exports.merge = function (oldConfig, vuxConfig) {
     if (!config.vue) {
       config.vue = {
         loaders: {
-          i18n: 'vux-loader/src/noop-loader.js'
+          i18n: 'g-vux-loader/src/noop-loader.js'
         }
       }
     } else {
       if (!config.vue.loaders) {
         config.vue.loaders = {}
       }
-      config.vue.loaders.i18n = 'vux-loader/src/noop-loader.js'
+      config.vue.loaders.i18n = 'g-vux-loader/src/noop-loader.js'
     }
   }
 
@@ -255,8 +266,14 @@ module.exports.merge = function (oldConfig, vuxConfig) {
     }))
   }
 
+  if (hasPlugin('progress-bar', vuxConfig.plugins)) {
+    const ProgressBarPlugin = require('progress-bar-webpack-plugin')
+    const pluginConfig = getFirstPlugin('progress-bar', vuxConfig.plugins)
+    config.plugins.push(new ProgressBarPlugin(pluginConfig.options || {}))
+  }
+
   if (hasPlugin('vux-ui', vuxConfig.plugins)) {
-    let mapPath = path.resolve(vuxConfig.options.projectRoot, 'node_modules/vux/src/components/map.json')
+    let mapPath = path.resolve(vuxConfig.options.projectRoot, 'node_modules/g-vux/src/components/map.json')
     if (vuxConfig.options.vuxDev) {
       mapPath = path.resolve(vuxConfig.options.projectRoot, 'src/components/map.json')
     }
@@ -276,7 +293,7 @@ module.exports.merge = function (oldConfig, vuxConfig) {
    * ======== read vux locales and set globally ========
    */
   if (hasPlugin('vux-ui', vuxConfig.plugins)) {
-    let vuxLocalesPath = path.resolve(vuxConfig.options.projectRoot, 'node_modules/vux/src/locales/all.yml')
+    let vuxLocalesPath = path.resolve(vuxConfig.options.projectRoot, 'node_modules/g-vux/src/locales/all.yml')
     if (vuxConfig.options.vuxDev) {
       vuxLocalesPath = path.resolve(vuxConfig.options.projectRoot, 'src/locales/all.yml')
     }
@@ -299,7 +316,7 @@ module.exports.merge = function (oldConfig, vuxConfig) {
   /**
    * ======== append vux-loader ========
    */
-  let loaderString = vuxConfig.options.loaderString || 'vux-loader!vue-loader'
+  let loaderString = vuxConfig.options.loaderString || 'g-vux-loader!vue-loader'
   const rewriteConfig = vuxConfig.options.rewriteLoaderString
   if (typeof rewriteConfig === 'undefined' || rewriteConfig === true) {
     let hasAppendVuxLoader = false
@@ -310,7 +327,7 @@ module.exports.merge = function (oldConfig, vuxConfig) {
         } else if (isWebpack2 && (rule.options || rule.query)) {
           delete rule.loader
           rule.use = [
-         'vux-loader',
+         'g-vux-loader',
             {
               loader: 'vue-loader',
               options: rule.options,
@@ -336,14 +353,14 @@ module.exports.merge = function (oldConfig, vuxConfig) {
   config.module[loaderKey].forEach(function (rule) {
     if (rule.loader === 'babel' || rule.loader === 'babel-loader' || (/babel/.test(rule.loader) && !/!/.test(rule.loader))) {
       if (isWebpack2 && rule.query) {
-        rule.use = [jsLoader, {
+        rule.use = [{
           loader: 'babel-loader',
           query: rule.query
         }]
         delete rule.query
         delete rule.loader
       } else {
-        rule.loader = 'babel-loader!' + jsLoader
+        rule.loader = 'babel-loader'
       }
     }
   })
@@ -470,7 +487,7 @@ function addStyleLoader(source, STYLE, variables, AFTER_LESS_STYLE) {
  * use babel so component's js can be compiled
  */
 function getBabelLoader(projectRoot, name) {
-  name = name || 'vux'
+  name = name || 'g-vux'
   if (!projectRoot) {
     projectRoot = path.resolve(__dirname, '../../../')
     if (/\.npm/.test(projectRoot)) {

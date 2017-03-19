@@ -14,19 +14,19 @@ module.exports = function (source) {
     source = parser(source, function (opts) {
       let str = ''
       opts.components.forEach(function (component) {
-        let file = `vux/${maps[component.originalName]}`
+        let file = `g-vux/${maps[component.originalName]}`
         if (vuxConfig.options.vuxDev) {
-          file = file.replace('vux/src/', './')
+          file = file.replace('g-vux/src/', './')
         }
         str += `import ${component.newName} from '${file}'\n`
       })
       return str
-    }, 'vux')
+    }, 'g-vux')
     
   }
 
   if(vuxConfig.options.vuxDev && /main\.js/.test(this.resourcePath)) {
-    source = source.replace(/!vux\/src/g, '!.')
+    source = source.replace(/!g-vux\/src/g, '!.')
   }
 
   if (vuxConfig.plugins.length) {

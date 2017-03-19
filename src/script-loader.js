@@ -11,7 +11,7 @@ module.exports = function (source) {
     return source
   }
 
-  const isVuxComponent = this.resourcePath.replace(/\\/g, '/').indexOf('/vux/src/components') > -1
+  const isVuxComponent = this.resourcePath.replace(/\\/g, '/').indexOf('/g-vux/src/components') > -1
 
   if (config.plugins.length) {
     config.plugins.forEach(function (plugin) {
@@ -30,10 +30,10 @@ module.exports = function (source) {
     source = parser(source, function (opts) {
       let str = ''
       opts.components.forEach(function (component) {
-        let file = `vux/${maps[component.originalName]}`
+        let file = `g-vux/${maps[component.originalName]}`
         if (config.options.vuxDev) {
           if (/App\.vue/.test(_this.resourcePath)) {
-            file = file.replace(/vux\/src/g, '.')
+            file = file.replace(/g-vux\/src/g, '.')
           } else {
             let relative = '..'
             // component file import other functions
@@ -41,13 +41,13 @@ module.exports = function (source) {
               relative = '../..'
             }
 
-            file = file.replace(/vux\/src/g, relative)
+            file = file.replace(/g-vux\/src/g, relative)
           }
         }
         str += `import ${component.newName} from '${file}'\n`
       })
       return str
-    }, 'vux')
+    }, 'g-vux')
   }
 
   if (config.options.vuxWriteFile === true) {
